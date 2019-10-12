@@ -1,4 +1,8 @@
-
+/**
+*
+* @author Lucas Losinskas
+*
+*/ 
 Repositorio do TCC "Modelamento e simulação de bancada didática de máquina de fluidos" autor Lucas Losinskas 
 
 Ideias centrais
@@ -13,3 +17,7 @@ Ideias centrais
     -   1 circuito de controle da geração do turbina;
     -   1 circuito de controle das bombas;
     -   1 circuido de controle do gerador;
+    -   Aplicativo.
+
+
+    
