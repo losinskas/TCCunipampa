@@ -28,3 +28,7 @@ body{
 .menu{
     
 }
+.iframe{
+width: max-content;
+height: min-content;
+        }
