@@ -1,0 +1,22 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+template1 = GetTemplate(
+    TemplateName="Fluid Flow",
+    Solver="CFX")
+system1 = template1.CreateSystem()
+geometry1 = system1.GetContainer(ComponentName="Geometry")
+geometry1.Edit(IsSpaceClaimGeometry=True)
+geometry1.Exit()
+system1.Delete()
+template2 = GetTemplate(TemplateName="BladeGen")
+system2 = template2.CreateSystem()
+bladeDesign1 = system2.GetContainer(ComponentName="Blade Design")
+bladeDesign1.Edit()
+bladeDesign1.Exit()
+bladeDesign1.Edit()
+bladeDesign1.Exit()
+system2.Delete()
+system3 = template2.CreateSystem()
+bladeDesign2 = system3.GetContainer(ComponentName="Blade Design")
+bladeDesign2.Edit()
