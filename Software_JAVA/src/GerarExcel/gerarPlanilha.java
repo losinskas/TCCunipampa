@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class gerarPlanilha {
 
-    private static final String filename = "C:/User/lucas/OneDrive/Área de Trabalho/ProjectTurbine/Planilha.xls";
+    private static final String filename = "./Planilha.xls";
 
     public gerarPlanilha() {
         HSSFWorkbook workbook = new HSSFWorkbook();

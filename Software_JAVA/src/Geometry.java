@@ -57,34 +57,18 @@ public class Geometry {
     private double y_em;        // Espessura máxima da coroa externa [m]
     private double y_ej[];      // Equação para o traçado da coroa interna [m]
     private double x_ej[];      // Pontos para equação [m]
+    private double x_ejC[];     // Pontos para equação corrigido [m]
+    private double y_ejC[];     // Equação para o traçado da coria interna corrigido [m]
 
     private static final String filename = "C:/Users/lucas/OneDrive/Área de Trabalho/ProjectTurbine/planilha.xls";
+    private static final String filenamePontos = "C:/Users/lucas/OneDrive/Área de Trabalho/ProjectTurbine/pontos.xls";
 
     public void GerarPlanilha() {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet1 = workbook.createSheet("Geometria1");
-        HSSFSheet sheet = workbook.createSheet("Geometria");
-        Row row = sheet.createRow(0);
-        Cell cell = row.createCell(0);
-        cell.setCellValue("x");
-        cell = row.createCell(1);
-        cell.setCellValue("y");
-        cell = row.createCell(2);
-        cell.setCellValue("x");
-        cell = row.createCell(3);
-        cell.setCellValue("y");
-        for (int i = 0; i < x_ej.length; i++) {
-            row = sheet.createRow(i + 1);
-            cell = row.createCell(0);
-            cell.setCellValue(x_ej[i]);
-            cell = row.createCell(1);
-            cell.setCellValue(y_ej[i]);
-            cell = row.createCell(2);
-            cell.setCellValue(x_ij[i]);
-            cell = row.createCell(3);
-            cell.setCellValue(y_ij[i]);
+        Row row;
+        Cell cell;
 
-        }
         row = sheet1.createRow(0);
         cell = row.createCell(0);
         cell.setCellValue("parameter_Name");
@@ -215,13 +199,24 @@ public class Geometry {
         cell = row.createCell(2);
         cell.setCellValue("mm");
         // Linha 16
-        row = sheet1.createRow(63);
+        row = sheet1.createRow(16);
         cell = row.createCell(0);
         cell.setCellValue("Y_em");
         cell = row.createCell(1);
         cell.setCellValue(y_em);
         cell = row.createCell(2);
         cell.setCellValue("m");
+        // Linha 17
+//        row = sheet1.createRow(17);
+//        cell = row.createCell(0);
+//        cell.setCellValue("yij");
+//        cell = row.createCell(1);
+//        cell.setCellValue("y(x) = 1,54*"+D_3i()+"*(x/"+li+"*(1-x/"+li+")^3)^0,5");
+//        cell = row.createCell(2);
+//        cell.setCellValue("m");
+
+
+
 
         try {
             FileOutputStream out = new FileOutputStream(new File(Geometry.filename));
@@ -237,8 +232,54 @@ public class Geometry {
         }
     }
 
+    public void GerarPontos(){
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("Pontos");
+        Row row1 = sheet.createRow(0);
+        Cell cell = row1.createCell(0);
+        cell.setCellValue("m");
+        row1 = sheet.createRow(1);
+        cell = row1.createCell(0);
+        cell.setCellValue("x");
+        cell = row1.createCell(1);
+        cell.setCellValue("y");
+        for (int i = 0; i < x_ej.length; i++) {
+            row1 = sheet.createRow(i + 2);
+            cell = row1.createCell(0);
+            cell.setCellValue(x_ij[i]);
+            cell = row1.createCell(1);
+            cell.setCellValue(y_ij[i]);
+        }
+        int auxilio = x_ej.length;
+        row1 = sheet.createRow(auxilio);
+        cell = row1.createCell(0);
+        cell.setCellValue("x1");
+        cell = row1.createCell(1);
+        cell.setCellValue("y1");
+        for (int i = 0; i < x_ej.length; i++) {
+            row1 = sheet.createRow(i+auxilio);
+            cell = row1.createCell(0);
+            cell.setCellValue(x_ejC[i]);
+            cell = row1.createCell(1);
+            cell.setCellValue(y_ejC[i]);
+
+        }
+            try{
+                FileOutputStream out = new FileOutputStream(new File(Geometry.filenamePontos));
+                workbook.write(out);
+                out.close();
+                System.out.printf("Arquivo gerado com sucesso!");
+            }catch(FileNotFoundException e){
+                e.printStackTrace();
+                System.out.println("Arquivo não encontrado!");
+            }catch (IOException e){
+                e.printStackTrace();
+                System.out.println("Erro na edição do arquivo \n");
+            }
+    }
     public Geometry() {
     }
+
 
     public Geometry(double Q, double Q_min, double H, double H_max, double h_sum, double Z_b, double eta_v, double eta_m) {
         this.Q = Q;
@@ -322,6 +363,8 @@ public class Geometry {
         Y_em();
         System.out.println("Espessura máxima da coroa externa y_em = " + y_em + " m");
         Y_ej();
+        Y_ejC();
+
     }
 
     private double Y() {
@@ -341,8 +384,8 @@ public class Geometry {
     }
 
     private double N() {
-        //return n = (n_qa * Math.pow(H, 0.75)) / (3 * Math.pow(q_r11, 0.5));
-        return n = 450;
+        return n = (n_qa * Math.pow(H, 0.75)) / (3 * Math.pow(q_r11, 0.5));
+       // return n = 450;
     }
 
     private double Z_p() {
@@ -386,13 +429,14 @@ public class Geometry {
     }
 
     private double N_qar() {
-        return n_qar = 3 * n * (Math.pow(q_r, 0.5)) / Math.pow(H, 0.75);
+         return n_qar = 3 * n * (Math.pow(q_r, 0.5)) / Math.pow(H, 0.75);
+         //return n_qar = 3 * 360 * (Math.pow(q_r, 0.5)) / Math.pow(H, 0.75);
     }
 
     /*Problema na equação*/
     private double D_5e() {
-//        return d_5e = 24.786 * Math.pow(H, 0.5) / n + 0.685 * Math.pow(q_r, 0.5) / Math.pow(H, 0.25);
-        return d_5e = 1.267;
+        return d_5e = 24.786 * Math.pow(H, 0.5) / n + 0.685 * Math.pow(q_r, 0.5) / Math.pow(H, 0.25);
+//        return d_5e = 1.267;
     }
 
     private double B_0() {
@@ -515,18 +559,19 @@ public class Geometry {
     }
 
     private void Y_ij() {
-        double xmax = li / 4;
+        double xmax = li/2;
         int pontos = 40;
         double delta = xmax / pontos;
         x_ij = new double[pontos];
         y_ij = new double[pontos];
         x_ij[0] = 0;
-        y_ij[0] = 1.54 * d_3i * Math.sqrt((x_ij[0] / li) * (Math.pow(1 - (x_ij[0] / li), 3)));
+        y_ij[0] = 1.54 * d_3i * Math.sqrt((x_ij[0] /(li)) * (Math.pow(1 - (x_ij[0] / (li)), 3)));
         for (int i = 1; i < pontos; i++) {
             x_ij[i] = x_ij[i - 1] + delta;
-            y_ij[i] = 1.54 * d_3i * Math.sqrt((x_ij[i] / li) * (Math.pow(1 - (x_ij[i] / li), 3)));
-            System.out.println("x_ij = " + x_ij[i] + " m \t y_ij = " + y_ij[i] + " m");
+            y_ij[i] = 1.54 * d_3i * Math.sqrt((x_ij[i] / (li)) * (Math.pow(1 - (x_ij[i] / (li)), 3)));
+            System.out.println("x_ij = " + x_ij[i] + " mm \t y_ij = " + y_ij[i] + " mm");
         }
+
     }
 
     private double Y_em() {
@@ -546,8 +591,409 @@ public class Geometry {
         for (int i = 1; i < pontos; i++) {
             x_ej[i] = delta + x_ej[i - 1];
             y_ej[i] = 3.08 * y_em * Math.sqrt((x_ej[i] / le) * Math.pow(1 - x_ej[i] / le, 3));
-            System.out.println("x_ej = " + x_ej[i] * 1000 + " m \t y_ej = " + y_ej[i] * 1000 + " m");
+            System.out.println("x_ej = " + x_ej[i] + " m \t y_ej = " + y_ej[i] + " m");
         }
 
+    }
+    private void Y_ejC(){
+        x_ejC = new double[x_ej.length];
+        y_ejC = new double[y_ej.length];
+        for (int i = 0; i < y_ej.length; i++) {
+            x_ejC[i] = (d_3e-d_3i) + x_ej[i];
+            y_ejC[i] = -b_0+y_ej[i];
+            System.out.println("x_ejC = "+ x_ejC[i] + " y_ejC = " +y_ejC[i]);
+        }
+    }
+
+    public double getQ() {
+        return Q;
+    }
+
+    public void setQ(double q) {
+        Q = q;
+    }
+
+    public double getQ_min() {
+        return Q_min;
+    }
+
+    public void setQ_min(double q_min) {
+        Q_min = q_min;
+    }
+
+    public double getH() {
+        return H;
+    }
+
+    public void setH(double h) {
+        H = h;
+    }
+
+    public double getH_max() {
+        return H_max;
+    }
+
+    public void setH_max(double h_max) {
+        H_max = h_max;
+    }
+
+    public double getH_sum() {
+        return h_sum;
+    }
+
+    public void setH_sum(double h_sum) {
+        this.h_sum = h_sum;
+    }
+
+    public double getZ_b() {
+        return Z_b;
+    }
+
+    public void setZ_b(double z_b) {
+        Z_b = z_b;
+    }
+
+    public double getEta_v() {
+        return eta_v;
+    }
+
+    public void setEta_v(double eta_v) {
+        this.eta_v = eta_v;
+    }
+
+    public double getEta_m() {
+        return eta_m;
+    }
+
+    public void setEta_m(double eta_m) {
+        this.eta_m = eta_m;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getToma_min() {
+        return toma_min;
+    }
+
+    public void setToma_min(double toma_min) {
+        this.toma_min = toma_min;
+    }
+
+    public double getN_qa() {
+        return n_qa;
+    }
+
+    public void setN_qa(double n_qa) {
+        this.n_qa = n_qa;
+    }
+
+    public double getQ_r11() {
+        return q_r11;
+    }
+
+    public void setQ_r11(double q_r11) {
+        this.q_r11 = q_r11;
+    }
+
+    public double getN() {
+        return n;
+    }
+
+    public void setN(double n) {
+        this.n = n;
+    }
+
+    public double getZ_p() {
+        return z_p;
+    }
+
+    public void setZ_p(double z_p) {
+        this.z_p = z_p;
+    }
+
+    public double getN_qar11() {
+        return n_qar11;
+    }
+
+    public void setN_qar11(double n_qar11) {
+        this.n_qar11 = n_qar11;
+    }
+
+    public double getQ_m() {
+        return q_m;
+    }
+
+    public void setQ_m(double q_m) {
+        this.q_m = q_m;
+    }
+
+    public double getToma_m() {
+        return toma_m;
+    }
+
+    public void setToma_m(double toma_m) {
+        this.toma_m = toma_m;
+    }
+
+    public double getH_sum1() {
+        return h_sum1;
+    }
+
+    public void setH_sum1(double h_sum1) {
+        this.h_sum1 = h_sum1;
+    }
+
+    public double getN_qr11() {
+        return n_qr11;
+    }
+
+    public void setN_qr11(double n_qr11) {
+        this.n_qr11 = n_qr11;
+    }
+
+    public double getEta_i() {
+        return eta_i;
+    }
+
+    public void setEta_i(double eta_i) {
+        this.eta_i = eta_i;
+    }
+
+    public double getQ_r() {
+        return q_r;
+    }
+
+    public void setQ_r(double q_r) {
+        this.q_r = q_r;
+    }
+
+    public double getN_qar() {
+        return n_qar;
+    }
+
+    public void setN_qar(double n_qar) {
+        this.n_qar = n_qar;
+    }
+
+    public double getD_5e() {
+        return d_5e;
+    }
+
+    public void setD_5e(double d_5e) {
+        this.d_5e = d_5e;
+    }
+
+    public double getB_0() {
+        return b_0;
+    }
+
+    public void setB_0(double b_0) {
+        this.b_0 = b_0;
+    }
+
+    public double getD_4e() {
+        return d_4e;
+    }
+
+    public void setD_4e(double d_4e) {
+        this.d_4e = d_4e;
+    }
+
+    public double getD_4i() {
+        return d_4i;
+    }
+
+    public void setD_4i(double d_4i) {
+        this.d_4i = d_4i;
+    }
+
+    public double getD_4m() {
+        return d_4m;
+    }
+
+    public void setD_4m(double d_4m) {
+        this.d_4m = d_4m;
+    }
+
+    public double getU_4m() {
+        return u_4m;
+    }
+
+    public void setU_4m(double u_4m) {
+        this.u_4m = u_4m;
+    }
+
+    public double getD_3e() {
+        return d_3e;
+    }
+
+    public void setD_3e(double d_3e) {
+        this.d_3e = d_3e;
+    }
+
+    public double getC_m() {
+        return c_m;
+    }
+
+    public void setC_m(double c_m) {
+        this.c_m = c_m;
+    }
+
+    public double getC_u4m() {
+        return c_u4m;
+    }
+
+    public void setC_u4m(double c_u4m) {
+        this.c_u4m = c_u4m;
+    }
+
+    public double getBeta_4m() {
+        return beta_4m;
+    }
+
+    public void setBeta_4m(double beta_4m) {
+        this.beta_4m = beta_4m;
+    }
+
+    public double getD_3i() {
+        return d_3i;
+    }
+
+    public void setD_3i(double d_3i) {
+        this.d_3i = d_3i;
+    }
+
+    public double getD_5i() {
+        return d_5i;
+    }
+
+    public void setD_5i(double d_5i) {
+        this.d_5i = d_5i;
+    }
+
+    public double getLi() {
+        return li;
+    }
+
+    public void setLi(double li) {
+        this.li = li;
+    }
+
+    public double getLe() {
+        return le;
+    }
+
+    public void setLe(double le) {
+        this.le = le;
+    }
+
+    public double getL_5e() {
+        return l_5e;
+    }
+
+    public void setL_5e(double l_5e) {
+        this.l_5e = l_5e;
+    }
+
+    public double getL_4i() {
+        return l_4i;
+    }
+
+    public void setL_4i(double l_4i) {
+        this.l_4i = l_4i;
+    }
+
+    public double getL_4e() {
+        return l_4e;
+    }
+
+    public void setL_4e(double l_4e) {
+        this.l_4e = l_4e;
+    }
+
+    public double getP_emax() {
+        return p_emax;
+    }
+
+    public void setP_emax(double p_emax) {
+        this.p_emax = p_emax;
+    }
+
+    public double getD() {
+        return d;
+    }
+
+    public void setD(double d) {
+        this.d = d;
+    }
+
+    public double[] getY_ij() {
+        return y_ij;
+    }
+
+    public void setY_ij(double[] y_ij) {
+        this.y_ij = y_ij;
+    }
+
+    public double[] getX_ij() {
+        return x_ij;
+    }
+
+    public void setX_ij(double[] x_ij) {
+        this.x_ij = x_ij;
+    }
+
+    public double getY_em() {
+        return y_em;
+    }
+
+    public void setY_em(double y_em) {
+        this.y_em = y_em;
+    }
+
+    public double[] getY_ej() {
+        return y_ej;
+    }
+
+    public void setY_ej(double[] y_ej) {
+        this.y_ej = y_ej;
+    }
+
+    public double[] getX_ej() {
+        return x_ej;
+    }
+
+    public void setX_ej(double[] x_ej) {
+        this.x_ej = x_ej;
+    }
+
+    public double[] getX_ejC() {
+        return x_ejC;
+    }
+
+    public void setX_ejC(double[] x_ejC) {
+        this.x_ejC = x_ejC;
+    }
+
+    public double[] getY_ejC() {
+        return y_ejC;
+    }
+
+    public void setY_ejC(double[] y_ejC) {
+        this.y_ejC = y_ejC;
+    }
+
+    public static String getFilename() {
+        return filename;
+    }
+
+    public static String getFilenamePontos() {
+        return filenamePontos;
     }
 }
