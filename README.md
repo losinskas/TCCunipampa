@@ -1,8 +1,6 @@
-/**
-*
-* @author Lucas Losinskas
-*
-*/ 
+# Repositorio de trabalho de conclusão de curso "Modelamento e simulação de bancada didática de máquina de fluidos"
+
+Lucas Losinskas
 Repositorio do TCC "Modelamento e simulação de bancada didática de máquina de fluidos" autor Lucas Losinskas 
 
 Ideias centrais
@@ -19,5 +17,7 @@ Ideias centrais
     -   1 circuido de controle do gerador;
     -   Aplicativo.
 
-
+- A pasta "Software_JAVA" contém o software escrito em java para os cálculos da geometria da Turbina com o rotor tipo Francis.
+- A pasta "Código_app" Contém o código fonte de aplicativo para o controle da bancada didática.
+- A pasta "Código_arduino" Contém o código fonte de CLP (Arduino) 
     
