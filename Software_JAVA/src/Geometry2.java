@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class Geometry1 {
+public class Geometry2 {
 
     private double relacaoCm[];
     private double[] sj;
@@ -50,7 +50,7 @@ public class Geometry1 {
     private double beta_hj[];
     private double zeta[];
 
-    public Geometry1(double[] sj, double[] dj, double cm, double fem, double dm, double Qr, double re, double ri,
+    public Geometry2(double[] sj, double[] dj, double cm, double fem, double dm, double Qr, double re, double ri,
                      double s, double D5m[], double n, double eta_i, double H, double rg, double Lg, double teta[], double zeta[]) {
         this.sj = sj;
         this.Dj = dj;
@@ -279,7 +279,7 @@ public class Geometry1 {
         cell.setCellValue("m");
 
         try {
-            FileOutputStream out = new FileOutputStream(new File(Geometry1.filename));
+            FileOutputStream out = new FileOutputStream(new File(Geometry2.filename));
             workbook.write(out);
             out.close();
             System.out.printf("Arquivo gerado com sucesso!");

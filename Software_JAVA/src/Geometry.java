@@ -281,7 +281,7 @@ public class Geometry {
     }
 
 
-    public Geometry(double Q, double Q_min, double H, double H_max, double h_sum, double Z_b, double eta_v, double eta_m) {
+    public Geometry(double Q, double Q_min, double H, double H_max, double h_sum, double Z_b, double eta_v, double eta_m, double n) {
         this.Q = Q;
         this.Q_min = Q_min;
         this.H = H;
@@ -290,11 +290,13 @@ public class Geometry {
         this.Z_b = Z_b;
         this.eta_v = eta_v;
         this.eta_m = eta_m;
+        this.n = n;
 
         // --- Inicio Cálculos --- //
         Y();
         System.out.println("Salto energético y = " + y + " J/kg");
         Toma_min();
+        N();
         System.out.println("Toma mínimo = " + toma_min);
         N_qa();
         System.out.println("n_qa = " + n_qa + " rpm");
@@ -341,10 +343,12 @@ public class Geometry {
         System.out.println("Velocidade tangencial c_u4m = " + c_u4m + " m/s");
         Beta_4m();
         System.out.println("Ângulo de direção da pá de entrada do rotor beta_4m = " + beta_4m + "º");
+
         D_3i();
         System.out.println("Diâmetro interno da coroa d_3i = " + d_3i + " m");
         D_5i();
         System.out.println("Diâmentro interno da coroa d_5i = " + d_5i + " m");
+        CorrigirBeta4m();
         Li();
         System.out.println("Altura interna da coroa li = " + li + " m");
         Le();
@@ -366,7 +370,39 @@ public class Geometry {
         Y_ejC();
 
     }
+    private void CorrigirBeta4m(){
 
+        while(beta_4m<=70){
+            d_5e *= 0.95;
+            B_0();
+            D_4e();
+            D_4i();
+            D_m();
+            U_4m();
+            D_3e();
+            C_m();
+            C_u4m();
+            Beta_4m();
+            D_3i();
+            D_4i();
+            D_5i();
+        }
+        while(beta_4m>90 ){
+            d_5e *= 1.05;
+            B_0();
+            D_4e();
+            D_4i();
+            D_m();
+            U_4m();
+            D_3e();
+            C_m();
+            C_u4m();
+            Beta_4m();
+            D_3i();
+            D_4i();
+            D_5i();
+        }
+    }
     private double Y() {
         return y = H * 9.81;
     }
@@ -376,7 +412,12 @@ public class Geometry {
     }
 
     private double N_qa() {
-        return n_qa = 627.7 * Math.pow((toma_min - 0.0311), 0.5);
+
+        // Transformar a rotação rpm para rps
+        double rps = n/60;
+
+        //return n_qa = 627.7 * Math.pow((toma_min - 0.0311), 0.5);
+        return n_qa = 1000 *rps*(Math.pow(Q, 0.5)/Math.pow(y, 0.75));
     }
 
     private double Q_r11() {
@@ -384,8 +425,8 @@ public class Geometry {
     }
 
     private double N() {
-        return n = (n_qa * Math.pow(H, 0.75)) / (3 * Math.pow(q_r11, 0.5));
-       // return n = 450;
+        //return n = (n_qa * Math.pow(H, 0.75)) / (3 * Math.pow(q_r11, 0.5));
+       return n = 450;
     }
 
     private double Z_p() {
@@ -489,7 +530,7 @@ public class Geometry {
     }
 
     private double C_m() {
-        return c_m = (4 * q_r) / (Math.PI * b_0 * d_3e);
+        return c_m = (q_r) / (Math.PI * b_0 * d_3e);
     }
 
     private double C_u4m() {
@@ -506,7 +547,7 @@ public class Geometry {
             d_3i = (2.32 - 0.975 * Math.pow(10, -2) * n_qar) * d_5e;
         } else {
             if (100 < n_qar && n_qar <= 350) {
-                d_3i = (0.7 + 0.16 / (2.11 * Math.pow(10, -3) * n_qar + 0.08)) * d_5e;
+                d_3i = (0.7 + (0.16 / (2.11 * Math.pow(10, -3) * n_qar + 0.08))) * d_5e;
             }
         }
         return d_3i;
@@ -517,7 +558,7 @@ public class Geometry {
     }
 
     private double Li() {
-        return li = (0.4 + 0.675 * Math.pow(10, -2) * n_qar - 0.0177 * Math.pow(10, -4) * Math.pow(n_qar, 2)) * d_5e;
+        return li = (0.4 + 0.168 * Math.pow(10, -2) * n_qar - 0.0177 * Math.pow(10, -4) * Math.pow(n_qar, 2)) * d_5e;
     }
 
     private double Le() {
