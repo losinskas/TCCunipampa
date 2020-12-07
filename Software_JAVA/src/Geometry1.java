@@ -165,7 +165,7 @@ public class Geometry1 {
         beta_j = new double[Dj.length];
         for (int i = 0; i < Dj.length; i++) {
             beta_j[i] = Math.atan(cmm / (uj[i] - cuj[i])) * 180 / Math.PI;
-            System.out.println("beta_j[" + i + "] = " + beta_j[i]);
+            System.out.println("beta_j*[" + i + "] = " + beta_j[i]);
         }
     }
 
@@ -290,6 +290,322 @@ public class Geometry1 {
             e.printStackTrace();
             System.out.println("Erro na edição do arquivo \n");
         }
+    }
+
+    public double[] getRelacaoCm() {
+        return relacaoCm;
+    }
+
+    public void setRelacaoCm(double[] relacaoCm) {
+        this.relacaoCm = relacaoCm;
+    }
+
+    public double[] getSj() {
+        return sj;
+    }
+
+    public void setSj(double[] sj) {
+        this.sj = sj;
+    }
+
+    public double getS() {
+        return s;
+    }
+
+    public void setS(double s) {
+        this.s = s;
+    }
+
+    public double getRi() {
+        return ri;
+    }
+
+    public void setRi(double ri) {
+        this.ri = ri;
+    }
+
+    public double getRe() {
+        return re;
+    }
+
+    public void setRe(double re) {
+        this.re = re;
+    }
+
+    public double[] getKj() {
+        return kj;
+    }
+
+    public void setKj(double[] kj) {
+        this.kj = kj;
+    }
+
+    public double[] getDj() {
+        return Dj;
+    }
+
+    public void setDj(double[] dj) {
+        Dj = dj;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public void setArea(double area) {
+        this.area = area;
+    }
+
+    public double getArea1() {
+        return area1;
+    }
+
+    public void setArea1(double area1) {
+        this.area1 = area1;
+    }
+
+    public double getCmm() {
+        return cmm;
+    }
+
+    public void setCmm(double cmm) {
+        this.cmm = cmm;
+    }
+
+    public double getCm4i() {
+        return cm4i;
+    }
+
+    public void setCm4i(double cm4i) {
+        this.cm4i = cm4i;
+    }
+
+    public double getKc() {
+        return kc;
+    }
+
+    public void setKc(double kc) {
+        this.kc = kc;
+    }
+
+    public double getCm() {
+        return cm;
+    }
+
+    public void setCm(double cm) {
+        this.cm = cm;
+    }
+
+    public double getFem() {
+        return fem;
+    }
+
+    public void setFem(double fem) {
+        this.fem = fem;
+    }
+
+    public double getKm() {
+        return km;
+    }
+
+    public void setKm(double km) {
+        this.km = km;
+    }
+
+    public double getDm() {
+        return dm;
+    }
+
+    public void setDm(double dm) {
+        this.dm = dm;
+    }
+
+    public double getQr() {
+        return Qr;
+    }
+
+    public void setQr(double qr) {
+        Qr = qr;
+    }
+
+    public double getBm() {
+        return bm;
+    }
+
+    public void setBm(double bm) {
+        this.bm = bm;
+    }
+
+    public double[] getU5m() {
+        return u5m;
+    }
+
+    public void setU5m(double[] u5m) {
+        this.u5m = u5m;
+    }
+
+    public double[] getD5m() {
+        return D5m;
+    }
+
+    public void setD5m(double[] d5m) {
+        D5m = d5m;
+    }
+
+    public double getN() {
+        return n;
+    }
+
+    public void setN(double n) {
+        this.n = n;
+    }
+
+    public double[] getBeta_5m() {
+        return beta_5m;
+    }
+
+    public void setBeta_5m(double[] beta_5m) {
+        this.beta_5m = beta_5m;
+    }
+
+    public double[] getUj() {
+        return uj;
+    }
+
+    public void setUj(double[] uj) {
+        this.uj = uj;
+    }
+
+    public double[] getCuj() {
+        return cuj;
+    }
+
+    public void setCuj(double[] cuj) {
+        this.cuj = cuj;
+    }
+
+    public double getEta_i() {
+        return eta_i;
+    }
+
+    public void setEta_i(double eta_i) {
+        this.eta_i = eta_i;
+    }
+
+    public double getH() {
+        return H;
+    }
+
+    public void setH(double h) {
+        H = h;
+    }
+
+    public double[] getBeta_j() {
+        return beta_j;
+    }
+
+    public void setBeta_j(double[] beta_j) {
+        this.beta_j = beta_j;
+    }
+
+    public double getRg() {
+        return rg;
+    }
+
+    public void setRg(double rg) {
+        this.rg = rg;
+    }
+
+    public double getLg() {
+        return Lg;
+    }
+
+    public void setLg(double lg) {
+        Lg = lg;
+    }
+
+    public double[] getZr() {
+        return zr;
+    }
+
+    public void setZr(double[] zr) {
+        this.zr = zr;
+    }
+
+    public double[] getEj() {
+        return ej;
+    }
+
+    public void setEj(double[] ej) {
+        this.ej = ej;
+    }
+
+    public double[] getTj() {
+        return tj;
+    }
+
+    public void setTj(double[] tj) {
+        this.tj = tj;
+    }
+
+    public double[] getTeta() {
+        return teta;
+    }
+
+    public void setTeta(double[] teta) {
+        this.teta = teta;
+    }
+
+    public double[] getFeej() {
+        return feej;
+    }
+
+    public void setFeej(double[] feej) {
+        this.feej = feej;
+    }
+
+    public double[] getCmj() {
+        return cmj;
+    }
+
+    public void setCmj(double[] cmj) {
+        this.cmj = cmj;
+    }
+
+    public double[] getCmj1() {
+        return cmj1;
+    }
+
+    public void setCmj1(double[] cmj1) {
+        this.cmj1 = cmj1;
+    }
+
+    public double[] getBeta_j1() {
+        return beta_j1;
+    }
+
+    public void setBeta_j1(double[] beta_j1) {
+        this.beta_j1 = beta_j1;
+    }
+
+    public double[] getBeta_hj() {
+        return beta_hj;
+    }
+
+    public void setBeta_hj(double[] beta_hj) {
+        this.beta_hj = beta_hj;
+    }
+
+    public double[] getZeta() {
+        return zeta;
+    }
+
+    public void setZeta(double[] zeta) {
+        this.zeta = zeta;
+    }
+
+    public static String getFilename() {
+        return filename;
     }
 }
 
